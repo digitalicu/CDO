@@ -3,8 +3,8 @@ from model import CollectionField
 from PySide6.QtWidgets import QGridLayout, QLabel, QLineEdit
 
 class GeneralParamWidget(BaseParamWidget):
-    def __init__(self, field, field_processor):
-        super(GeneralParamWidget, self).__init__(field, field_processor)
+    def __init__(self, field, field_processor, **kwargs):
+        super(GeneralParamWidget, self).__init__(field, field_processor, **kwargs)
         layout = QGridLayout()
 
         layout.addWidget(QLabel("Name"), 0, 0)

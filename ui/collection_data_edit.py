@@ -70,7 +70,7 @@ class CollectionDataEditWindow(BaseWidget):
             else:
                 self.save_existed_row()
 
-        self.get_main_window().update(tab_index=2)        
+        self.get_main_window("CdoMainWindow").update_ui(tab_index=2)        
         self.close()
 
     def save_existed_row(self):

@@ -9,8 +9,9 @@ class BaseParamWidget(BaseWidget):
     collection = None
     data = None
 
-    def __init__(self, field, field_processor):
+    def __init__(self, field, field_processor, tab_index=0):
         super(BaseParamWidget, self).__init__()
+        self.tab_index = tab_index
         self.field = field
         self.field_processor = field_processor
         self.load_model_data()
@@ -41,9 +42,9 @@ class BaseFieldParam(BasePlugin):
     def get_title(self) -> str:
         return self.title
     
-    def get_param_widget(self, field: CollectionField):
+    def get_param_widget(self, field: CollectionField, tab_index=0):
         if self.param_widget is not None:
-            return self.param_widget(field, self)
+            return self.param_widget(field, self, tab_index=tab_index)
         return QWidget()
     
     def get_field_edit_param_widget(self):

@@ -46,6 +46,7 @@ class CollectionFieldsView(BaseCollectionTab):
                     "action": self.make_callback(self.on_field_edit_clicked, [f])
                 }]))
             field_list_view = ScrollableActionPanelList(field_list)
+            field_list_view.setMinimumHeight(400)
             layout.addWidget(field_list_view, row, 0, 1, 3)
             row += 1
 
@@ -56,7 +57,7 @@ class CollectionFieldsView(BaseCollectionTab):
         new_field_name = self.new_field_name.text()
         new_field_plugin = Plugin.get(Plugin.package==field_plugin_package)
         new_field = CollectionField.create(name=new_field_name, collection=self.collection, type=new_field_plugin)
-        self.get_main_window().update(tab_index=self.tab_index)
+        self.get_main_window("CdoMainWindow").update_ui(tab_index=self.tab_index)
 
     def on_field_edit_clicked(self, field: CollectionField):
         self.w = FieldEditWindow(field)

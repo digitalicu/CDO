@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QPushButton, QScrollArea, QWidget
 from PySide6.QtGui import Qt
-from widget import BaseWidget, TextInputWindow, TextActionPanel
+from widget import BaseWidget, TextInputWindow, TextActionPanel, BaseMainWindow
 from model import Collection, create_collection_by_name
 from ui import CollectionEditWindow
 
@@ -32,7 +32,7 @@ class MainWindowCollections(BaseWidget):
             self.layout.addWidget(scrollable)
     
     def on_collection_edit_clicked(self, collection: Collection):
-        self.get_main_window().set_collection_view(collection)
+        self.get_main_window(CdoMainWindow).set_collection_view(collection)
     
     def add_collection_btn_clicked(self):
         self.w = TextInputWindow(lambda value: self.create_collection_by_name(value))
@@ -42,31 +42,21 @@ class MainWindowCollections(BaseWidget):
         create_collection_by_name(name)
         self.get_main_window().update()
 
-class CdoMainWindow(QMainWindow):
+class CdoMainWindow(BaseMainWindow):
     central_widget = MainWindowCollections
     central_widget_kargs = []
     central_widget_kwargs = {}
 
     def __init__(self):
         super().__init__()
-        self.setWindowState(Qt.WindowMaximized)
-        self.update()
-
-    def update(self, **kwargs):
-        self.central_widget_kwargs.update(kwargs)
-        self.setCentralWidget(self.central_widget(*self.central_widget_kargs, **self.central_widget_kwargs))
-
-    def set_central_widget(self, widget, kargs=[], kwargs={}):
-        self.central_widget = widget
-        self.central_widget_kargs = kargs
-        self.central_widget_kwargs = kwargs
-        self.update()
-
-    def set_main_view(self):
-        self.set_central_widget(MainWindowCollections)
+        # self.setWindowState(Qt.WindowMaximized)
+        self.update_ui()
 
     def set_collection_view(self, collection: Collection):
         self.set_central_widget(CollectionEditWindow, [collection])
+        
+    def set_main_view(self):
+        self.set_central_widget(MainWindowCollections)
 
     def closeEvent(self, event):
         event.accept()
