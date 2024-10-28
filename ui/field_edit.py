@@ -40,7 +40,8 @@ class FieldEditCentralWidget(BaseWidget):
     def on_save_btn_click(self):
         for package, ptw in self.param_tab_widgets.items():
             data = ptw.prepare_data()
-            data.save()
+            if data is not None:
+                data.save()
         self.get_main_window("CdoMainWindow").update_ui(tab_index=1)
         self.close()
 

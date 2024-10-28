@@ -2,6 +2,7 @@ from peewee import *
 from system import CdoApp
 from model import CollectionField
 from ui import FieldEditWindow
+from widget import TextActionPanel
 from plugin.field_param import BaseFieldParam, BaseParamWidget
 from PySide6.QtWidgets import QGridLayout, QLabel, QLineEdit, QPushButton
 
@@ -29,7 +30,7 @@ class SelectOptionsParamWidget(BaseParamWidget):
 
         row = 1
         for d in self.data:
-            layout.addWidget(QLabel(d.value), row, 0)
+            layout.addWidget(TextActionPanel(d.value), row, 0)
             row += 1
 
         self.setLayout(layout)
@@ -44,6 +45,9 @@ class SelectOptionsParamWidget(BaseParamWidget):
 
     def load_model_data(self):
         self.data = SelectFieldValue.select().where(self.field_processor.model.field==self.field).execute()
+
+    def prepare_data(self):
+        return None
 
 class SelectOptionsFieldParam(BaseFieldParam):
     include_field = ["plugin.field.select_field.SelectField"]
