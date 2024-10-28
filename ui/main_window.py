@@ -25,7 +25,7 @@ class MainWindowCollections(BaseWidget):
             for c in collections_data:
                 frame_layout.addWidget(TextActionPanel(c.name, [{
                     "title": "Edit",
-                    "action": self.make_callback(self.on_collection_edit_clicked, [c]),
+                    "action": self.make_callback(self.on_collection_edit_clicked, c),
                 }]))
             frame.setLayout(frame_layout)
             scrollable.setWidget(frame)
@@ -40,7 +40,7 @@ class MainWindowCollections(BaseWidget):
 
     def create_collection_by_name(self, name):
         create_collection_by_name(name)
-        self.get_main_window().update()
+        self.get_main_window(CdoMainWindow).update_ui()
 
 class CdoMainWindow(BaseMainWindow):
     central_widget = MainWindowCollections

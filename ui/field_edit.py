@@ -34,7 +34,7 @@ class FieldEditCentralWidget(BaseWidget):
 
         self.setLayout(layout)
 
-    def update_ui(self, tab_index=0):
+    def update_ui(self):
         self.build_layout()
 
     def on_save_btn_click(self):

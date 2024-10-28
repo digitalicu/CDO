@@ -43,7 +43,7 @@ class CollectionFieldsView(BaseCollectionTab):
             for f in self.collection.fields:
                 field_list.append((f.name, [{
                     "title": "Edit",
-                    "action": self.make_callback(self.on_field_edit_clicked, [f])
+                    "action": self.make_callback(self.on_field_edit_clicked, f)
                 }]))
             field_list_view = ScrollableActionPanelList(field_list)
             field_list_view.setMinimumHeight(400)

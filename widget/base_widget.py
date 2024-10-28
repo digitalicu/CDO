@@ -14,9 +14,11 @@ class BaseWidget(QWidget):
             elif isinstance(w, w_type):
                 return w
             
-    def make_callback(self, func, kargs=[], kwargs={}):
-        def call():
-            func(*kargs, **kwargs)
+    def make_callback(self, func, *kargs, **kwargs):
+        def call(*fkargs, **fkwargs):
+            nkargs = [*kargs, *fkargs]
+            kwargs.update(fkwargs)
+            func(*nkargs, **kwargs)
         return call
     
 class BaseMainWindow(QMainWindow):

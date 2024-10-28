@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QVBoxLayout, QPushButton, QGridLayout, QTabWidget, QComboBox
-from widget import BaseWidget, BoxWidget, ErrorWindow
+from widget import BaseWidget, BoxWidget, ErrorWindow, ScrollableList
 from system import CdoApp
 from model import Collection, CollectionDataRow, CollectionFieldValue, CollectionField
 
@@ -23,6 +23,7 @@ class CollectionDataEditWindow(BaseWidget):
     def build_layout(self):
         layout = QGridLayout()
 
+        field_widgets = []
         for f in self.collection.fields:
             field_processor = CdoApp.get_plugins()["FIELD_PLUGIN"][f.type.package]
 
@@ -37,7 +38,9 @@ class CollectionDataEditWindow(BaseWidget):
                 "processor": field_processor,
                 "widget": field_prepared_widget
             }
-            layout.addWidget(BoxWidget(f.name, field_prepared_widget))
+            field_widgets.append(BoxWidget(f.name, field_prepared_widget))
+
+        layout.addWidget(ScrollableList(widgets=field_widgets))
 
         self.add_data_row_btn = QPushButton("Save")
         self.add_data_row_btn.clicked.connect(self.on_save_data_row_btn_clicked)

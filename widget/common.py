@@ -30,6 +30,27 @@ class BoxWidget(BaseWidget):
         global_layout.addWidget(box)
         self.setLayout(global_layout)
 
+class ScrollableList(BaseWidget):
+    widgets = []
+
+    def __init__(self, widgets=[]):
+        super().__init__()
+        self.widgets = widgets
+
+        frame = QWidget()
+        frame_layout = QVBoxLayout()
+        scrollable = QScrollArea()
+
+        for w in widgets:
+            frame_layout.addWidget(w)
+            
+        frame.setLayout(frame_layout)
+        scrollable.setWidget(frame)
+
+        self_layout = QVBoxLayout()
+        self_layout.addWidget(scrollable)
+        self.setLayout(self_layout)
+
 class ScrollableActionPanelList(BaseWidget):
     panels = []
     def __init__(self, panels=[]):
