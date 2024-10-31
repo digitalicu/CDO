@@ -1,6 +1,5 @@
 from plugin.field import CdoField, BaseFieldEditWidget
 from PySide6.QtWidgets import QLineEdit
-from model import CollectionField
 
 class IntFieldLineEdit(QLineEdit):
     def __init__(self, saved_value=None):

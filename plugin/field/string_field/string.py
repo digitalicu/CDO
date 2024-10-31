@@ -5,6 +5,9 @@ class StringFieldEditWidget(BaseFieldEditWidget):
 
     def get_value(self):
         return self.edit_widget.text()
+    
+    def set_value(self, value):
+        self.edit_widget.setText(value)
 
 class StringField(CdoField):
     name = "String"
