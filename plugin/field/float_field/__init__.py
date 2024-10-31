@@ -1,0 +1,1 @@
+from plugin.field.float_field.float import FloatField
