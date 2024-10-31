@@ -41,7 +41,7 @@ class CollectionFieldsView(BaseCollectionTab):
         if self.collection.fields.count() > 0:
             field_list = []
             for f in self.collection.fields:
-                field_list.append((f.name, [{
+                field_list.append(("%s (%s)" % (f.name, f.type.package), [{
                     "title": "Edit",
                     "action": self.make_callback(self.on_field_edit_clicked, f)
                 }]))

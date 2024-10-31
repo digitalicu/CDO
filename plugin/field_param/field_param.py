@@ -20,13 +20,20 @@ class BaseParamWidget(BaseWidget):
         if self.field_processor.model == CollectionField:
             self.data = self.field
         else:
-            self.data = self.field_processor.model.get(self.field_processor.model.field==self.field)
+            self.data = self.field_processor.model.select().where(self.field_processor.model.field==self.field)
 
     def set_data(self, key, value):
         self.data.__dict__["__data__"][key] = value
 
     def prepare_data(self):
         return self.data
+    
+class BaseFieldParamEditWidget(BaseParamWidget):
+    is_empty = False
+
+    def __init__(self, field, field_processor, base_param_widget, tab_index=0):
+        super(BaseFieldParamEditWidget, self).__init__(field, field_processor, tab_index)
+        self.base_param_widget = base_param_widget
 
 class BaseFieldParam(BasePlugin):
     exclude_field = []

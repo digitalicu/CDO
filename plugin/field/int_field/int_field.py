@@ -13,6 +13,9 @@ class IntFieldEditWidget(BaseFieldEditWidget):
 
     def get_value(self):
         return self.edit_widget.text()
+    
+    def set_value(self, value):
+        self.edit_widget.setText(value)
 
 class IntField(CdoField):
     name = "Integer"

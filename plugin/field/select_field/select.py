@@ -23,6 +23,7 @@ class SelectFieldEditWidget(BaseFieldEditWidget):
             combo_box.addItem(v.value)
             if v.id == self.saved_value:
                 combo_box.setCurrentIndex(i)
+                self.value = v.id
 
         combo_box.currentIndexChanged.connect(self.make_callback(self.on_item_selected, values))
         return combo_box

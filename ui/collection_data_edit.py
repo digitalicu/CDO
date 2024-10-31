@@ -1,7 +1,49 @@
-from PySide6.QtWidgets import QVBoxLayout, QPushButton, QGridLayout, QTabWidget, QComboBox
+from PySide6.QtWidgets import QVBoxLayout, QPushButton, QGridLayout, QTabWidget, QComboBox, QWidget, QHBoxLayout, QGroupBox
 from widget import BaseWidget, BoxWidget, ErrorWindow, ScrollableList
 from system import CdoApp
 from model import Collection, CollectionDataRow, CollectionFieldValue, CollectionField
+
+class CollectionFieldDataEditWidget(BaseWidget):
+    def __init__(self, field: CollectionField, row):
+        super().__init__()
+        self.field = field
+        self.row = row
+        self.field_processor = CdoApp.get_plugins()["FIELD_PLUGIN"][self.field.type.package]
+        self.build_layout()
+
+    def build_layout(self):
+        layout = QHBoxLayout()
+
+        base_param_widget = self.prepare_base_param_widget()
+        layout.addWidget(base_param_widget)
+
+        applicable_plugins = CdoApp.get_applicable_plugins(self.field.type.package)
+        for ppackage, plugin_processor in applicable_plugins.items():
+            plugin_widget_class = plugin_processor.get_field_edit_param_widget()
+            if plugin_widget_class is not None:
+                plugin_widget = plugin_widget_class(self.field, plugin_processor, base_param_widget)
+                if not plugin_widget.is_empty:
+                    layout.addWidget(plugin_widget)
+
+        self.box(layout)
+
+    def box(self, panel_widget_layout):
+        layout = QVBoxLayout()
+        box = QGroupBox(self.field.name)
+        box.setLayout(panel_widget_layout)
+        layout.addWidget(box)
+        self.setLayout(layout)
+
+    def prepare_base_param_widget(self):
+        saved_field_value = None
+        if self.row is not None:
+            saved_field_data = self.row.fields.where(CollectionFieldValue.field==self.field).get_or_none()
+            if saved_field_data is not None:
+                saved_field_value = self.field_processor.unpack(saved_field_data.value)
+
+        field_prepared_widget = self.field_processor.get_edit_widget(self.field, saved_field_value)
+
+        return field_prepared_widget
 
 class CollectionDataEditWindow(BaseWidget):
     field_utilities = {}
@@ -26,19 +68,12 @@ class CollectionDataEditWindow(BaseWidget):
         field_widgets = []
         for f in self.collection.fields:
             field_processor = CdoApp.get_plugins()["FIELD_PLUGIN"][f.type.package]
-
-            saved_field_value = None
-            if self.row is not None:
-                saved_field_data = self.row.fields.where(CollectionFieldValue.field==f).get_or_none()
-                if saved_field_data is not None:
-                    saved_field_value = field_processor.unpack(saved_field_data.value)
-
-            field_prepared_widget = field_processor.get_edit_widget(f, saved_field_value)
+            field_prepared_widget = CollectionFieldDataEditWidget(f, self.row)
+            field_widgets.append(field_prepared_widget)
             self.field_utilities[f.id] = {
                 "processor": field_processor,
                 "widget": field_prepared_widget
             }
-            field_widgets.append(BoxWidget(f.name, field_prepared_widget))
 
         layout.addWidget(ScrollableList(widgets=field_widgets))
 

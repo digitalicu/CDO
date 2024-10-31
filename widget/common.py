@@ -82,6 +82,7 @@ class TextActionPanel(BaseWidget):
     def __init__(self, text, actions=[]):
         super().__init__()
         layout = QHBoxLayout()
+        layout.setContentsMargins(0,0,0,0)
 
         text_label = QLabel(text)
         layout.addWidget(text_label)

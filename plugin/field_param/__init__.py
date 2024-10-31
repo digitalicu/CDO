@@ -1,1 +1,1 @@
-from plugin.field_param.field_param import BaseFieldParam, BaseParamWidget
+from plugin.field_param.field_param import BaseFieldParam, BaseParamWidget, BaseFieldParamEditWidget

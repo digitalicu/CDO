@@ -64,6 +64,9 @@ class BaseFieldEditWidget(BaseFieldWidget):
     
     def get_value(self):
         return None
+    
+    def set_value(self, value):
+        pass
 
 class CdoField(BasePlugin):
     name = ""

@@ -30,7 +30,7 @@ class SelectOptionsParamWidget(BaseParamWidget):
 
         row = 1
         for d in self.data:
-            layout.addWidget(TextActionPanel(d.value), row, 0)
+            layout.addWidget(TextActionPanel(d.value), row, 0, 1, 2)
             row += 1
 
         self.setLayout(layout)
