@@ -16,3 +16,11 @@ class Plugin(Model):
 
     class Meta:
         database = CdoApp.get_db()
+
+class Settings(Model):
+    plugin = ForeignKeyField(Plugin, backref="settings")
+    key = CharField()
+    value = CharField()
+
+    class Meta:
+        database = CdoApp.get_db()

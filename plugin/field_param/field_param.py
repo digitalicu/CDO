@@ -35,6 +35,9 @@ class BaseFieldParamEditWidget(BaseParamWidget):
         super(BaseFieldParamEditWidget, self).__init__(field, field_processor, tab_index)
         self.base_param_widget = base_param_widget
 
+    def process_value(self, value):
+        return value
+
 class BaseFieldParam(BasePlugin):
     exclude_field = []
     include_field = []

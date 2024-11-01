@@ -4,6 +4,8 @@ from system import CdoApp
 from model import Collection, CollectionDataRow, CollectionFieldValue, CollectionField
 
 class CollectionFieldDataEditWidget(BaseWidget):
+    plugin_widgets = {}
+
     def __init__(self, field: CollectionField, row):
         super().__init__()
         self.field = field
@@ -14,16 +16,18 @@ class CollectionFieldDataEditWidget(BaseWidget):
     def build_layout(self):
         layout = QHBoxLayout()
 
-        base_param_widget = self.prepare_base_param_widget()
-        layout.addWidget(base_param_widget)
+        self.base_param_widget = self.prepare_base_param_widget()
+        layout.addWidget(self.base_param_widget)
 
         applicable_plugins = CdoApp.get_applicable_plugins(self.field.type.package)
         for ppackage, plugin_processor in applicable_plugins.items():
             plugin_widget_class = plugin_processor.get_field_edit_param_widget()
             if plugin_widget_class is not None:
-                plugin_widget = plugin_widget_class(self.field, plugin_processor, base_param_widget)
+                plugin_widget = plugin_widget_class(self.field, plugin_processor, self.base_param_widget)
                 if not plugin_widget.is_empty:
                     layout.addWidget(plugin_widget)
+
+                self.plugin_widgets[ppackage] = plugin_widget
 
         self.box(layout)
 
@@ -44,6 +48,13 @@ class CollectionFieldDataEditWidget(BaseWidget):
         field_prepared_widget = self.field_processor.get_edit_widget(self.field, saved_field_value)
 
         return field_prepared_widget
+    
+    def get_value(self):
+        base_value = self.base_param_widget.get_value()
+        for ppackage, pwidget in self.plugin_widgets.items():
+            base_value = pwidget.process_value(base_value)
+
+        return base_value
 
 class CollectionDataEditWindow(BaseWidget):
     field_utilities = {}

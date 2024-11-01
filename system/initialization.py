@@ -11,7 +11,9 @@ class Initializer(object):
         db = CdoApp.get_db()
 
         if len(db.get_tables()) == 0:
-            db.create_tables([Collection, PluginType, Plugin, CollectionField, CollectionDataRow, CollectionFieldValue])
+            db.create_tables([Collection, PluginType, Plugin, 
+                              CollectionField, CollectionDataRow, CollectionFieldValue,
+                              Settings])
 
             field_plugin_type = PluginType.create(code="FIELD_PLUGIN")
             field_plugin_type.save()
@@ -19,12 +21,15 @@ class Initializer(object):
             field_param_plugin_type.save()
 
             Plugin.create(package="plugin.field.int_field.IntField", type=field_plugin_type, initialized=True).save()
+            Plugin.create(package="plugin.field.float_field.FloatField", type=field_plugin_type, initialized=False).save()
             Plugin.create(package="plugin.field.string_field.StringField", type=field_plugin_type, initialized=True).save()
             Plugin.create(package="plugin.field.bool_field.BooleanField", type=field_plugin_type, initialized=True).save()
             Plugin.create(package="plugin.field.select_field.SelectField", type=field_plugin_type, initialized=False).save()
+            Plugin.create(package="plugin.field.datetime_field.DateTimeField", type=field_plugin_type, initialized=False).save()
 
             Plugin.create(package="plugin.field_param.general.GeneralFieldParam", type=field_param_plugin_type).save()
             Plugin.create(package="plugin.field.select_field.SelectOptionsFieldParam", type=field_param_plugin_type).save()
+            Plugin.create(package="plugin.field.datetime_field.DateTimeSettingsFieldParam", type=field_param_plugin_type).save()
 
     def load_plugins(self):
         plugins = {}

@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QVBoxLayout, QPushButton, QGridLayout, QTabWidget,
 from widget import BaseMainWindow, BaseWidget
 from system import CdoApp
 from model import CollectionField
+from collections.abc import Iterable
 
 class FieldEditCentralWidget(BaseWidget):
     def __init__(self, field: CollectionField = None, tab_index=0):
@@ -41,7 +42,11 @@ class FieldEditCentralWidget(BaseWidget):
         for package, ptw in self.param_tab_widgets.items():
             data = ptw.prepare_data()
             if data is not None:
-                data.save()
+                if isinstance(data, Iterable):
+                    for d in data:
+                        d.save()
+                else:
+                    data.save()
         self.get_main_window("CdoMainWindow").update_ui(tab_index=1)
         self.close()
 

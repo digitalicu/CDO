@@ -1,7 +1,10 @@
 from peewee import SqliteDatabase
+from system import CdoSettingsManager
 
 DB = SqliteDatabase('cdo.db')
 DB.connect()
+
+SETTINGS = CdoSettingsManager(DB)
 
 PLUGINS = {}
 
@@ -15,6 +18,11 @@ class CdoApp(object):
     def close_db():
         global DB
         DB.close()
+
+    @staticmethod
+    def get_settings_manager():
+        global SETTINGS
+        return SETTINGS
     
     @staticmethod
     def set_loaded_plugins(plugins):
